@@ -49,7 +49,7 @@ resource "azurerm_linux_web_app" "ifm_web_app" {
   connection_string {
     name  = "ifm-mysql-connection"
     type  = "MySql"
-    value = "Server=${azurerm_mysql_server.ifm_mysql_server.fqdn};Database=${azurerm_mysql_database.ifm_mysql_database.name};Uid=${azurerm_mysql_server.ifm_mysql_server.administrator_login}@${azurerm_mysql_server.ifm_mysql_server.name};Pwd=${azurerm_mysql_server.ifm_mysql_server.administrator_login_password}"
+    value = "Server=${azurerm_mysql_flexible_server.ifm_mysql_server.fqdn};Database=${azurerm_mysql_flexible_database.ifm_mysql_database.name};Uid=${azurerm_mysql_flexible_server.ifm_mysql_server.administrator_login}@${azurerm_mysql_flexible_server.ifm_mysql_server.name};Pwd=${azurerm_mysql_flexible_server.ifm_mysql_server.administrator_login_password}"
   }
 
   backup {
@@ -82,29 +82,27 @@ resource "azurerm_private_endpoint" "private_endpoint_webapp" {
 }
 
 ############# DATABASE #############
-resource "azurerm_mysql_server" "ifm_mysql_server" {
+resource "azurerm_mysql_flexible_server" "ifm_mysql_server" {
   name                         = var.mysql_server_name
   location                     = local.project_location
   resource_group_name          = local.resource_group_name
-  sku_name                     = "B_Gen5_1"
+  sku_name                     = "B_Standard_B1s"
   administrator_login          = var.administrator_login
-  administrator_login_password = var.administrator_login_password
+  administrator_password       = var.administrator_login_password
   backup_retention_days        = 7
-  version                      = "5.7"
-  ssl_enforcement_enabled      = true
 }
 
-resource "azurerm_mysql_database" "ifm_mysql_database" {
+resource "azurerm_mysql_flexible_database" "ifm_mysql_database" {
   name                = var.mysql_database_name
   resource_group_name = local.resource_group_name
-  server_name         = azurerm_mysql_server.ifm_mysql_server.name
+  server_name         = azurerm_mysql_flexible_server.ifm_mysql_server.name
   charset             = "utf8"
   collation           = "utf8_general_ci"
 }
 
-resource "azurerm_mysql_firewall_rule" "azure_access_rule" {
+resource "azurerm_mysql_flexible_server_firewall_rule" "azure_access_rule" {
   name                = "FireWallRule"
-  server_name         = azurerm_mysql_server.ifm_mysql_server.name
+  server_name         = azurerm_mysql_flexible_server.ifm_mysql_server.name
   resource_group_name = local.resource_group_name
   start_ip_address    = "0.0.0.0"
   end_ip_address      = "0.0.0.0"
