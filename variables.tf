@@ -74,6 +74,12 @@ variable "remote_subnet_webapp" {
   default = "subnet_webapp"
 }
 
+#subnet for mysql flexible server -> vnet peerring needs to have Microsoft.DBforMySQL/flexibleServers delegation
+variable "remote_subnet_flexible_server" {
+  type    = string
+  default = "subnet_flexible_server"
+}
+
 variable "remote_subnet_private_endpoint" {
   type    = string
   default = "subnet_private_endpoint"

@@ -45,6 +45,12 @@ data "azurerm_subnet" "remote_subnet_webapp" {
   virtual_network_name = data.azurerm_virtual_network.remote_virtual_network.name
 }
 
+data "azurerm_subnet" "remote_subnet_flexible_server" {
+  name                 = var.remote_subnet_flexible_server
+  resource_group_name  = var.remote_vnet_resource_group
+  virtual_network_name = data.azurerm_virtual_network.remote_virtual_network.name
+}
+
 data "azurerm_subnet" "remote_subnet_private_endpoint" {
   name                 = var.remote_subnet_private_endpoint
   resource_group_name  = var.remote_vnet_resource_group

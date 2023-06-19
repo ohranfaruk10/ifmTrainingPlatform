@@ -90,6 +90,7 @@ resource "azurerm_mysql_flexible_server" "ifm_mysql_server" {
   administrator_login          = var.administrator_login
   administrator_password       = var.administrator_login_password
   backup_retention_days        = 7
+  delegated_subnet_id          = data.azurerm_subnet.remote_subnet_flexible_server.id
 }
 
 resource "azurerm_mysql_flexible_database" "ifm_mysql_database" {
